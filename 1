@@ -4,22 +4,23 @@
     <div id="frame"></div>
 
     <script>
-      // 1. Token uit querystring halen
+      // SbId uit de URL van de huidige pagina halen
       const params = new URLSearchParams(window.location.search);
-      const token = params.get("KnToken");
+      const sbId = params.get("SbId");
 
-      // 2. Token naar jouw backend sturen die de AFAS API aanroept
-      fetch(`/resolve-dossieritem?token=${token}`)
-        .then(res => res.json())
-        .then(data => {
-          const dossierId = data.sbId; // bijv. 987654
-          // 3. iFrame dynamisch in DOM zetten
-          const iframe = document.createElement("iframe");
-          iframe.src = `https://82813.afasinsite.nl/nieuw/aangepast-werkplekprofiel/opbouw-aangepast-werkplekprofiel-beoordelen?SbId=${dossierId}`;
-          iframe.width = "100%";
-          iframe.height = "600";
-          document.getElementById("frame").appendChild(iframe);
-        });
+      if (sbId) {
+        // Bouw de iFrame-URL op met hetzelfde SbId
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://82813.afasinsite.nl/nieuw/file/download/KnSubjectReportIn/Rapport.pdf?SbId=${sbId}`;
+        iframe.width = "100%";
+        iframe.height = "800";
+        iframe.style.border = "1px solid black";
+
+        document.getElementById("frame").appendChild(iframe);
+      } else {
+        document.getElementById("frame").innerText =
+          "Geen SbId gevonden in de URL.";
+      }
     </script>
   </body>
 </html>
