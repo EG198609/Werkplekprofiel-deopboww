@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <iframe src="https://82813.afasinsite.nl/nieuw/aangepast-werkplekprofiel/opbouw-aangepast-werkplekprofiel-beoordelen?SbId=723677" 
-    </iframe>
+    <div id="frame"></div>
+
+    <script>
+      // 1. Token uit querystring halen
+      const params = new URLSearchParams(window.location.search);
+      const token = params.get("KnToken");
+
+      // 2. Token naar jouw backend sturen die de AFAS API aanroept
+      fetch(`/resolve-dossieritem?token=${token}`)
+        .then(res => res.json())
+        .then(data => {
+          const dossierId = data.sbId; // bijv. 987654
+          // 3. iFrame dynamisch in DOM zetten
+          const iframe = document.createElement("iframe");
+          iframe.src = `https://82813.afasinsite.nl/nieuw/aangepast-werkplekprofiel/opbouw-aangepast-werkplekprofiel-beoordelen?SbId=${dossierId}`;
+          iframe.width = "100%";
+          iframe.height = "600";
+          document.getElementById("frame").appendChild(iframe);
+        });
+    </script>
   </body>
 </html>
